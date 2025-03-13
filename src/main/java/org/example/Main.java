@@ -1,5 +1,6 @@
 package org.example;
 
+import permutation.Node;
 import permutation.ShowAllNode;
 
 import java.util.LinkedList;
@@ -8,15 +9,22 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Hello, World!");
 
-        LinkedList<Character> list = new LinkedList<>();
+        Node a = new Node("Laki 1", "a");
+        Node b = new Node("Laki 2", "b");
+        Node c = new Node("Laki 3", "a");
+        Node d = new Node("Perempuan 1", "a");
+        Node e = new Node("Perempuan 2", "a");
 
-        list.add('a');
-        list.add('b');
-        list.add('c');
-        list.add('d');
-        list.add('e');
 
-        ShowAllNode go = new ShowAllNode(list, 3);
+        LinkedList<Node> list = new LinkedList<>();
+
+        list.add(a);
+        list.add(b);
+        list.add(c);
+        list.add(d);
+        list.add(e);
+
+        ShowAllNode go = new ShowAllNode(list, 5);
         go.startRec();
     }
 }
