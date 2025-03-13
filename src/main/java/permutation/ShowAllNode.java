@@ -1,14 +1,17 @@
+/**
+ * Author by Jordan Vincent
+ * Universitas Sanata Dharma
+ * */
 package permutation;
 
 import java.util.*;
 
 public class ShowAllNode {
-//    private LinkedList<Node> nodes;
-    private LinkedList<Character> hosts;            //Anggota (n)
-    private Set<LinkedList<Character>> history;     //Menyimpan gabungan yang pernah dibuat
-    private LinkedList<Character> current;          //Set yang sedang dibentuk
-    private Map<Character, Boolean> hold;
-    private int size;   //Jumlah yang diminta (r)
+    private LinkedList<Node> hosts;            //Anggota (n)
+    private Set<LinkedList<Node>> history;     //Menyimpan gabungan yang pernah dibuat
+    private LinkedList<Node> current;          //Set yang sedang dibentuk
+    private Map<Node, Boolean> hold;
+    private int size;                               //Jumlah yang diminta (r)
 
     /**
      * Constructor
@@ -24,17 +27,17 @@ public class ShowAllNode {
     /**
      * Constructor
      */
-    public ShowAllNode(LinkedList<Character> hosts, int size) {
+    public ShowAllNode(LinkedList<Node> hosts, int size) {
         this(size);
         this.hosts.addAll(hosts);
     }
 
-    public void addHosts(char Character) {
-        this.hosts.add(Character);
+    public void addHosts(Node host) {
+        this.hosts.add(host);
     }
 
     //Recursive
-    public void recAllNode(char host) {
+    public void recAllNode(Node host) {
         if (!this.hold.get(host)) {
             this.hold.put(host, true);
             this.current.add(host);
@@ -44,7 +47,7 @@ public class ShowAllNode {
                 this.history.add(new LinkedList<>(this.current));
 
                 if (this.current.size() != this.size) {
-                    for (char nextHost : this.hosts) {
+                    for (Node nextHost : this.hosts) {
                         this.recAllNode(nextHost);
                     }
                 }
@@ -59,7 +62,7 @@ public class ShowAllNode {
         this.hold = new HashMap<>();
         this.resetHold();
 
-        for (char host : this.hosts) {
+        for (Node host : this.hosts) {
             this.recAllNode(host);
         }
 
@@ -67,16 +70,20 @@ public class ShowAllNode {
     }
 
     public void resetHold() {
-        for (char host : this.hosts) {
+        for (Node host : this.hosts) {
             this.hold.put(host, false);
         }
     }
 
     public void output() {
         int counter = 0;
-        for (LinkedList<Character> history : this.history) {
+        for (LinkedList<Node> history : this.history) {
             if (history.size() == this.size) {
-                System.out.println(++counter + "-->" + history);
+                List<String> result = new ArrayList<>();
+                for (Node node : history) {
+                    result.add(node.getLabel());
+                }
+                System.out.println(++counter + "-->" + result);
             }
         }
     }
