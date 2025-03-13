@@ -11,13 +11,13 @@ public class Node {
     private Node left, right;   //Masih dalam pertimbangan apakah dibutuhkan???
     private Object data;
 
-    private Node(String label) {
+    public Node(String label) {
         this.label = label;
         this.left = null;
         this.right = null;
     }
 
-    private Node(String label, Object data) {
+    public Node(String label, Object data) {
         this(label);
         this.data = data;
     }
