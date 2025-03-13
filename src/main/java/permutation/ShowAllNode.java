@@ -68,7 +68,13 @@ public class ShowAllNode {
 
     }
 
-    //Result ambil dari history saja
+    /**
+     * Result ambil dari history saja
+     *
+     * For merge using .addAll()
+     * then put the result into history
+     *
+     */
     private void mergeResults (Map<String, LinkedList<Node>> hostGroups) {
         for (Object key : hostGroups.keySet()) {
 
