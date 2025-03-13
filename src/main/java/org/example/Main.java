@@ -13,11 +13,11 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Hello, World!");
 
-        Node a = new Node("Laki 1", "a");
-        Node b = new Node("Laki 2", "b");
-        Node c = new Node("Laki 3", "a");
-        Node d = new Node("Perempuan 1", "a");
-        Node e = new Node("Perempuan 2", "a");
+        Node a = new Node("L1", "Laki 1");
+        Node b = new Node("L2", "Laki 2");
+        Node c = new Node("L3", "Laki 3");
+        Node d = new Node("P1", "Perempuan 1");
+        Node e = new Node("P2", "Perempuan 2");
 
 
         LinkedList<Node> list = new LinkedList<>();
