@@ -1,3 +1,7 @@
+/**
+ * Author by Jordan Vincent
+ * Universitas Sanata Dharma
+ * */
 package permutation;
 
 import java.util.*;

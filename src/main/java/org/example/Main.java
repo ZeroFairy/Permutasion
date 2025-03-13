@@ -1,3 +1,7 @@
+/**
+ * Author by Jordan Vincent
+ * Universitas Sanata Dharma
+ */
 package org.example;
 
 import permutation.Node;
