@@ -70,21 +70,21 @@ public class ShowAllNode {
         if (!this.hold.get(key)) {
             this.hold.put(key, true);
 
-            if (hostGroups.get(key).iterator().hasNext()) {
-                this.current.addAll(hostGroups.get(key).iterator().next());
-            }
+            Iterator<LinkedList<Node>> iterator = hostGroups.get(key).iterator();
+            while (iterator.hasNext()) {
+                LinkedList<Node> nextList = iterator.next();
+                this.current.addAll(nextList);
 
-            //masih belum memiliki kombinasi set tersebut di history
-            if (!this.history.contains(this.current)) {
-                this.history.add(new LinkedList<>(this.current));
+                if (!this.history.contains(this.current)) {
+                    this.history.add(new LinkedList<>(this.current));
 
-                for (Object nextKey : hostGroups.keySet()) {
-                    this.recList((String) nextKey, hostGroups);
+                    for (String nextKey : hostGroups.keySet()) {
+                        this.recList(nextKey, hostGroups);
+                    }
                 }
+                this.current.removeAll(nextList);
             }
-
             this.hold.put(key, false);
-            this.current.removeLast();
         }
     }
 
@@ -96,9 +96,19 @@ public class ShowAllNode {
      *
      */
     private void mergeResults (Map<String, Set<LinkedList<Node>>> hostGroups) {
+        this.resetHold(this.setToList(hostGroups));
         for (Object key : hostGroups.keySet()) {
             recList((String) key, hostGroups);
         }
+    }
+
+    private LinkedList<Node> setToList(Map<String, Set<LinkedList<Node>>> hostGroups) {
+        LinkedList<Node> result = new LinkedList<>();
+        for (Object key : hostGroups.keySet()) {
+            Node node = new Node((String) key);
+            result.add(node);
+        }
+        return result;
     }
 
     private Set<LinkedList<Node>> getFromHistory(int size) {
@@ -138,6 +148,7 @@ public class ShowAllNode {
     //Untuk soal A
     private void startARec() {
         this.hold = new HashMap<>();
+        this.resetHold(this.hosts);
 
         for (Node host : this.hosts) {
             this.recAllNode(host, this.hosts);
@@ -153,6 +164,7 @@ public class ShowAllNode {
 
         for (Object key : split.keySet()) {
             LinkedList<Node> group = split.get(key);
+            this.resetHold(group);
 
             for (Node host : group) {
                 this.recAllNode(host, group);
@@ -172,23 +184,25 @@ public class ShowAllNode {
         switch (start.toUpperCase()) {
             case "SOAL_A":
                 startARec();
+                break;
 //            case "SOAL_B":
 //                startBRec();
 //            case "SOAL_C":
 //                startCRec();
             case "SOAL_D":
                 startDRec();
+                break;
             default:
                 System.out.println("Sorry, tidak ada pilihan ini");
         }
     }
 
     //Sepertinya tidak butuh di reset, tinggal di clear, dan tunggu di isi lagi saja
-//    private void resetHold(LinkedList<Node> groupHost) {
-//        for (Node host : groupHost) {
-//            this.hold.put(host, false);
-//        }
-//    }
+    private void resetHold(LinkedList<Node> groupHost) {
+        for (Node host : groupHost) {
+            this.hold.put(host.getLabel(), false);
+        }
+    }
 
     private void output() {
         int counter = 0;
