@@ -10,7 +10,7 @@ public class ShowAllNode {
     private LinkedList<Node> hosts;            //Anggota (n)
     private Set<LinkedList<Node>> history;     //Menyimpan gabungan yang pernah dibuat
     private LinkedList<Node> current;          //Set yang sedang dibentuk
-    private Map<Node, Boolean> hold;
+    private Map<String, Boolean> hold;
     private int size;                               //Jumlah yang diminta (r)
 
     /**
@@ -41,8 +41,8 @@ public class ShowAllNode {
      * @param hosts --> for expected group of host
      */
     private void recAllNode(Node host, LinkedList<Node> hosts) {
-        if (!this.hold.get(host)) {
-            this.hold.put(host, true);
+        if (!this.hold.get(host.getLabel())) {
+            this.hold.put(host.getLabel(), true);
             this.current.add(host);
 
             //masih belum memiliki kombinasi set tersebut di history
@@ -56,16 +56,36 @@ public class ShowAllNode {
                 }
             }
 
-            this.hold.put(host, false);
+            this.hold.put(host.getLabel(), false);
             this.current.removeLast();
         }
     }
 
     /**
      * Recursive untuk merge list
+     *
+     * Logika-nya mirip dengan yang atas
      */
-    private void recList() {
+    private void recList(String key, Map<String, Set<LinkedList<Node>>> hostGroups) {
+        if (!this.hold.get(key)) {
+            this.hold.put(key, true);
 
+            if (hostGroups.get(key).iterator().hasNext()) {
+                this.current.addAll(hostGroups.get(key).iterator().next());
+            }
+
+            //masih belum memiliki kombinasi set tersebut di history
+            if (!this.history.contains(this.current)) {
+                this.history.add(new LinkedList<>(this.current));
+
+                for (Object nextKey : hostGroups.keySet()) {
+                    this.recList((String) nextKey, hostGroups);
+                }
+            }
+
+            this.hold.put(key, false);
+            this.current.removeLast();
+        }
     }
 
     /**
@@ -75,17 +95,17 @@ public class ShowAllNode {
      * then put the result into history
      *
      */
-    private void mergeResults (Map<String, LinkedList<Node>> hostGroups) {
+    private void mergeResults (Map<String, Set<LinkedList<Node>>> hostGroups) {
         for (Object key : hostGroups.keySet()) {
-
+            recList((String) key, hostGroups);
         }
     }
 
-    private LinkedList<Node> getFromHistory(int size) {
-        LinkedList<Node> result = new LinkedList();
+    private Set<LinkedList<Node>> getFromHistory(int size) {
+        Set<LinkedList<Node>> result = new HashSet<>();
         for (LinkedList<Node> history : this.history) {
             if (history.size() == size) {
-                result.addAll(history);
+                result.add(history);
             }
         }
         return result;
@@ -118,7 +138,6 @@ public class ShowAllNode {
     //Untuk soal A
     private void startARec() {
         this.hold = new HashMap<>();
-        this.resetHold(this.hosts);
 
         for (Node host : this.hosts) {
             this.recAllNode(host, this.hosts);
@@ -129,7 +148,7 @@ public class ShowAllNode {
 
     private void startDRec() {
         this.hold = new HashMap<>();
-        Map<String, LinkedList<Node>> fromHist = new HashMap<>();
+        Map<String, Set<LinkedList<Node>>> fromHist = new HashMap<>();
         Map<String, LinkedList<Node>> split = this.splitHostGroup();
 
         for (Object key : split.keySet()) {
@@ -141,7 +160,7 @@ public class ShowAllNode {
 
             //Bias atur untuk size dari history
             fromHist.put(key.toString(), this.getFromHistory(group.size()));
-            this.resetHold(group);
+            this.hold.clear();
             this.history.clear();
         }
 
@@ -164,11 +183,12 @@ public class ShowAllNode {
         }
     }
 
-    private void resetHold(LinkedList<Node> groupHost) {
-        for (Node host : groupHost) {
-            this.hold.put(host, false);
-        }
-    }
+    //Sepertinya tidak butuh di reset, tinggal di clear, dan tunggu di isi lagi saja
+//    private void resetHold(LinkedList<Node> groupHost) {
+//        for (Node host : groupHost) {
+//            this.hold.put(host, false);
+//        }
+//    }
 
     private void output() {
         int counter = 0;
