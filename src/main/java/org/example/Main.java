@@ -11,40 +11,24 @@ import java.util.LinkedList;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello, World!");
-
-        Node a = new Node("Laki 1", "a");
-        Node b = new Node("Laki 2", "b");
-        Node c = new Node("Laki 3", "a");
-        Node d = new Node("Perempuan 1", "a");
-        Node e = new Node("Perempuan 2", "a");
-
+        Node a = new Node("L1", "Laki-Laki 1");
+        Node b = new Node("L2", "Laki-Laki 2");
+        Node c = new Node("L3", "Laki-Laki 3");
+        Node d = new Node("P1", "Perempuan 1");
+        Node e = new Node("P2", "Perempuan 2");
 
         LinkedList<Node> list = new LinkedList<>();
-
         list.add(a);
         list.add(b);
         list.add(c);
         list.add(d);
         list.add(e);
 
-        ShowAllNode go = new ShowAllNode(list, 5);
-        go.startRec();
+        String soal = "SOAL_D";
+        int nilaiR = 5;
+
+        //Size = r pada permutasi
+        ShowAllNode go = new ShowAllNode(list, nilaiR);
+        go.start(soal);
     }
 }
-
-//        Set<LinkedList<Character>> have = new HashSet<LinkedList<Character>>();
-//
-//        have.add(list);
-//
-//        System.out.println(have.contains(list));
-//
-//        list.clear();
-//
-//        list.add('a');
-//        list.add('b');
-//        list.add('c');
-//        list.add('e');
-//        list.add('d');
-//
-//        System.out.println(have.contains(list));
