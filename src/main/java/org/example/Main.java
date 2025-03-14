@@ -24,7 +24,7 @@ public class Main {
         list.add(d);
         list.add(e);
 
-        String soal = "SOAL_A";
+        String soal = "SOAL_D";
         int nilaiR = 5;
 
         //Size = r pada permutasi
