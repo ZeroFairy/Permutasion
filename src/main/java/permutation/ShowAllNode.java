@@ -1,6 +1,8 @@
 /**
  * Author by Jordan Vincent
  * Universitas Sanata Dharma
+ *
+ * Nilai R yang diminta, disesuaikan untuk masing2 soal
  * */
 package permutation;
 
@@ -11,24 +13,14 @@ public class ShowAllNode {
     private Set<LinkedList<Node>> history;     //Menyimpan gabungan yang pernah dibuat
     private LinkedList<Node> current;          //Set yang sedang dibentuk
     private Map<String, Boolean> hold;
-    private int size;                               //Jumlah yang diminta (r)
 
     /**
      * Constructor
      */
-    public ShowAllNode(int size) {
+    public ShowAllNode(LinkedList<Node> hosts) {
         this.hosts = new LinkedList<>();
         this.history = new HashSet<>();
         this.current = new LinkedList<>();
-
-        this.size = size;
-    }
-
-    /**
-     * Constructor
-     */
-    public ShowAllNode(LinkedList<Node> hosts, int size) {
-        this(size);
         this.hosts.addAll(hosts);
     }
 
@@ -49,7 +41,7 @@ public class ShowAllNode {
             if (!this.history.contains(this.current)) {
                 this.history.add(new LinkedList<>(this.current));
 
-                if (this.current.size() != this.size) {
+                if (this.current.size() != this.hosts.size()) {
                     for (Node nextHost : hosts) {
                         this.recAllNode(nextHost, hosts);
                     }
@@ -146,7 +138,7 @@ public class ShowAllNode {
     }
 
     //Untuk soal A
-    private void startARec() {
+    public void startARec() {
         this.hold = new HashMap<>();
         this.resetHold(this.hosts);
 
@@ -154,10 +146,11 @@ public class ShowAllNode {
             this.recAllNode(host, this.hosts);
         }
 
-        this.output();
+        this.output(this.hosts.size());
     }
 
-    private void startDRec() {
+    public void startDRec(Map<String, Integer> feature) {
+        int count = 0;
         this.hold = new HashMap<>();
         Map<String, Set<LinkedList<Node>>> fromHist = new HashMap<>();
         Map<String, LinkedList<Node>> split = this.splitHostGroup();
@@ -170,31 +163,22 @@ public class ShowAllNode {
                 this.recAllNode(host, group);
             }
 
-            //Bias atur untuk size dari history
-            fromHist.put(key.toString(), this.getFromHistory(group.size()));
-            this.hold.clear();
-            this.history.clear();
+            if (feature == null) {
+                fromHist.put(key.toString(), this.getFromHistory(group.size()));
+                this.hold.clear();
+                this.history.clear();
+            } else {
+                System.out.println(key.toString());
+                int size = feature.get(key.toString());
+                fromHist.put(key.toString(), this.getFromHistory(size));
+                count += size;
+                this.hold.clear();
+                this.history.clear();
+            }
         }
 
         this.mergeResults(fromHist);
-        this.output();
-    }
-
-    public void start(String start) {
-        switch (start.toUpperCase()) {
-            case "SOAL_A":
-                startARec();
-                break;
-//            case "SOAL_B":
-//                startBRec();
-//            case "SOAL_C":
-//                startCRec();
-            case "SOAL_D":
-                startDRec();
-                break;
-            default:
-                System.out.println("Sorry, tidak ada pilihan ini");
-        }
+        this.output(count);
     }
 
     //Sepertinya tidak butuh di reset, tinggal di clear, dan tunggu di isi lagi saja
@@ -204,10 +188,10 @@ public class ShowAllNode {
         }
     }
 
-    private void output() {
+    private void output(int size) {
         int counter = 0;
         for (LinkedList<Node> history : this.history) {
-            if (history.size() == this.size) {
+            if (history.size() == size) {
                 List<String> result = new ArrayList<>();
                 for (Node node : history) {
                     result.add(node.getLabel());
