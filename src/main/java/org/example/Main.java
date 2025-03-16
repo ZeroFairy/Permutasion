@@ -13,6 +13,7 @@ import java.util.*;
 public class Main {
     public static Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) {
+
         Node a = new Node("L1", "Laki-Laki 1");
         Node b = new Node("L2", "Laki-Laki 2");
         Node c = new Node("L3", "Laki-Laki 3");
