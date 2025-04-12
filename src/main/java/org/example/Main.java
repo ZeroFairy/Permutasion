@@ -7,7 +7,6 @@ package org.example;
 import permutation.Node;
 import permutation.ShowAllNode;
 
-import java.sql.SQLOutput;
 import java.util.*;
 
 public class Main {
